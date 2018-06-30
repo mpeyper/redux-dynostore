@@ -5,13 +5,12 @@
  * This source code is licensed under the BSD-style license found in the
  * LICENSE file in the root directory of this source tree.
  */
-
 import isPlainObject from 'lodash.isplainobject'
 import { subspaced } from 'react-redux-subspace'
 
 const subspacedEnhancer = ({ mapExtraState = () => null } = {}) => identifier => {
   const mapState = (state, rootState) => {
-    const componentState = state[identifier]
+    const componentState = identifier.split(/[./]/g).reduce((s, i) => s[i], state)
     if (!isPlainObject(componentState)) {
       return componentState
     }
