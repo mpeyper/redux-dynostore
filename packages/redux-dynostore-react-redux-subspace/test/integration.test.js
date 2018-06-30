@@ -26,6 +26,9 @@ describe('integration tests', () => {
       testId: {
         testKey: 'nested value'
       }
+    },
+    ['parentId/testId']: {
+      testKey: 'escaped value'
     }
   }
 
@@ -47,7 +50,10 @@ describe('integration tests', () => {
     testDispatch: () => ({ type: 'TEST_DISPATCH' })
   }
 
-  const ConnectedTestComponent = connect(mapStateToProps, mapDispatchToProps)(TestComponent)
+  const ConnectedTestComponent = connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(TestComponent)
 
   beforeEach(() => {
     store = createStore((state = initialState) => state, dynostore())
@@ -64,5 +70,16 @@ describe('integration tests', () => {
     )
 
     expect(wrapper.html()).toBe('<p>nested value</p>')
+  })
+
+  test('should create subspaced enhanced component with escaped identifier', () => {
+    const SubspacedComponent = dynamic('parentId/testId', subspaced())(ConnectedTestComponent)
+    const wrapper = mount(
+      <Provider store={store}>
+        <SubspacedComponent />
+      </Provider>
+    )
+
+    expect(wrapper.html()).toBe('<p>escaped value</p>')
   })
 })

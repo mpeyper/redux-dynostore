@@ -8,10 +8,12 @@
 
 import isPlainObject from 'lodash.isplainobject'
 import { subspaced } from 'react-redux-subspace'
+import { unescapeIdentifier } from '@redux-dynostore/core'
 
 const subspacedEnhancer = ({ mapExtraState = () => null } = {}) => identifier => {
+  const rawIdentifier = unescapeIdentifier(identifier)
   const mapState = (state, rootState) => {
-    const componentState = state[identifier]
+    const componentState = state[rawIdentifier]
     if (!isPlainObject(componentState)) {
       return componentState
     }

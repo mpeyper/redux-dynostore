@@ -10,10 +10,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import wrapDisplayName from 'recompose/wrapDisplayName'
-import { createDynamicTarget } from '@redux-dynostore/core'
+import { createDynamicTarget, escapeIdentifier } from '@redux-dynostore/core'
 
 const createDynamic = (identifier, enhancers) => {
-  const dynamicEnhancer = createDynamicTarget(enhancers)(identifier)
+  const dynamicEnhancer = createDynamicTarget(enhancers)(escapeIdentifier(identifier))
 
   return Component => {
     class Dynamic extends React.Component {
